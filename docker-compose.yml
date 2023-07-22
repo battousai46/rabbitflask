@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  api:
+    restart: always
+    build: .
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/app
+    environment:
+      DEBUG: 'true'
+    env_file:
+      - .env
+    command: gunicorn --bind "0.0.0.0:8000" "app:create_app()"    
+    
+  celery_worker:
+    restart: always
+    build: .
+    env_file:
+      - .env
+    command: celery -A app.core.worker worker --loglevel=INFO
+    depends_on:
+      - rabbitmq
+      
+  rabbitmq:
+    image: rabbitmq:3.8.18-alpine
+    ports:
+    - "5672:5672"
+    env_file:
+      - .env
+  
