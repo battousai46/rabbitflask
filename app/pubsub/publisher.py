@@ -1,7 +1,7 @@
 import json
 import boto3
 
-local_sqs_url = "http://localhost:4566/000000000000/sqs-flask-queue",
+local_sqs_url = "http://localhost:4566/000000000000/sqs-flask-queue"
 # sqs in localstack
 sqs = boto3.resource("sqs", endpoint_url="http://localhost:4566", region_name='ap-southeast-2')
 

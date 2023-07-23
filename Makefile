@@ -10,4 +10,4 @@ setup-local-sqs:
 	awslocal sqs create-queue --region ap-southeast-2 --queue-name sqs-flask-queue
 
 purge-local-sqs:
-	awslocal sqs purge-queue --region ap-southeast-2 --queue-name sqs-flask-queue
+	awslocal sqs purge-queue --queue-url http://localhost:4566/000000000000/sqs-flask-queue;

@@ -24,4 +24,4 @@ def register_routes(app):
     def publish_sqs_msg():
         print("going to publish msg in flash sqs")
         Publisher().publish({"msg":"event pushed from flask app"})
-        return jsonify({"sqs flask:msg published"})
+        return jsonify({"sqs flask":"msg published"})
