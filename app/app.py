@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 
 from app.tasks.rabbit_task import rabbit_task_exec
-
+from app.pubsub.publisher import Publisher
 
 def create_app():
     flask_app = Flask(__name__)
@@ -19,3 +19,9 @@ def register_routes(app):
         print("initiating rabbit task for celery")
         rabbit_task_exec.apply_async((3, 7), ignore_result=True)
         return jsonify({"rabbit task":"async queued"})
+
+    @app.route("/sqs-push")
+    def publish_sqs_msg():
+        print("going to publish msg in flash sqs")
+        Publisher().publish({"msg":"event pushed from flask app"})
+        return jsonify({"sqs flask:msg published"})

@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  localstack:
+    image: localstack/localstack:0.12.18
+    environment:
+      - EDGE_PORT=4566
+      - SERVICES=sqs,s3
+    ports:
+      - 4566:4566
   api:
     build: .
     env_file:
