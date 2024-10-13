@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  localstack:
+    image: localstack/localstack:0.12.18
+    environment:
+      - EDGE_PORT=4566
+      - SERVICES=sqs,s3
+    ports:
+      - 4566:4566
+  api:
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    entrypoint: gunicorn --bind 0.0.0.0:8000 "app:create_app()"
+    ports:
+      - "8000:8000"
+
+  celery_worker:
+    restart: always
+    build: .
+    command: celery -A app.worker worker --loglevel=DEBUG
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
